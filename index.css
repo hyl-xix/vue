@@ -1,0 +1,16 @@
+.active{
+    color:#f00;
+    cursor:pointer;
+
+}
+.active:hover{
+    color:#0ff;
+    text-decoration:underline;
+}
+.text-danger{
+    background: #0000ff;
+    color:#fff;
+    border:1px solid #f5f5f5;
+    padding:10px 15px;
+    border-radius:8px;
+}

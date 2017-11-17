@@ -1,0 +1,303 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>vue</title>
+    <link rel="stylesheet" href="./index.css"/>
+</head>
+<body>
+<div id="app">
+    {{ message }}
+</div>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
+<div id="app-2">
+  <span v-bind:title="message"  v-bind:style="{ color: activeColor, fontSize: fontSize + 'px' }">
+    鼠标悬停几秒钟查看此处动态绑定的提示信息！
+  </span>
+</div>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
+<div id="app-3">
+    <p v-if="seen">现在你看到我了</p>
+</div>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
+<div id="app-4">
+    <ol>
+        <li v-bind:class="{ active: isActive }" v-for="todo in todos">
+            {{ todo.text }}
+        </li>
+    </ol>
+</div>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
+<div id="app-5">
+    <p>{{ message }}</p>
+    <button  v-bind:class="[activeClass, errorClass]" v-on:click="reverseMessage">逆转消息</button>
+</div>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
+<div id="app-6">
+    <p>{{ message }}</p>
+    <input v-model="message">
+</div>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
+<div id="app-7">
+    <ol>
+        <!--
+          现在我们为每个 todo-item 提供 todo 对象
+          todo 对象是变量，即其内容可以是动态的。
+          我们也需要为每个组件提供一个“key”，晚些时候我们会做个解释。
+        -->
+        <todo-item
+                v-for="item in groceryList"
+                v-bind:todo="item"
+                v-bind:key="item.id">
+        </todo-item>
+    </ol>
+</div>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
+<div id="example">
+    <p>Original message: "{{ message }}"</p>
+    <p>Computed reversed message: "{{ reversedMessage }}"</p>
+</div>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
+<div id="watch-example">
+    <p>
+        Ask a yes/no question:
+        <input v-model="question">
+    </p>
+    <p>{{ answer }}</p>
+</div>
+<!-- - - - - - - - - - - - - - - - - - - - - - - - - -->
+<div id="logoType">
+    <div v-if="loginType === 'username'">
+        <label>Username</label>
+        <input placeholder="Enter your username" key="username-input">
+    </div>
+    <div v-else>
+        <label>Email</label>
+        <input placeholder="Enter your email address" key="email-input">
+    </div>
+</div>
+
+
+<div id="app-if">
+    <div v-if="type === 'A'">
+        A
+    </div>
+    <div v-else-if="type === 'B'">
+        B
+    </div>
+    <div v-else-if="type === 'C'">
+        C
+    </div>
+    <div v-else>
+        Not A/B/C
+    </div>
+</div>
+<div id="app-show" v-show="ok">hello show</div>
+<ul id="example-1">
+    <li v-for="item of items">
+        {{ item.message }}
+    </li>
+</ul>
+<ul id="example-2">
+    <li v-for="(item, index) in items">
+        {{ parentMessage }} - {{ index }} - {{ item.message }}
+    </li>
+</ul>
+<ul id="v-for-object" class="demo">
+    <div v-for="(value, key) in object" :key="item.id">
+        {{ key }}: {{ value }}
+    </div>
+    <div v-for="(value, key, index) in object" :key="item.id">
+        {{ index }}. {{ key }}: {{ value }}
+    </div>
+</ul>
+
+
+<script src="./vue.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios@0.12.0/dist/axios.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/lodash@4.13.1/lodash.min.js"></script>
+<script type="text/javascript">
+    var app = new Vue({
+        el: '#app',
+        data: {
+            message: 'Hello Vue!'
+        }
+    })
+//- - - - - - - - - - - - - - - - - - - - - - - - - -
+    var app2 = new Vue({
+        el: '#app-2',
+        data: {
+            message: '页面加载于 ' + new Date().toLocaleString(),
+            activeColor:'#ccc',
+            fontSize:30
+        }
+    })
+    app2.message = '新消息'   //重新赋值
+//- - - - - - - - - - - - - - - - - - - - - - - - - -
+    var app3 = new Vue({
+        el:'#app-3',
+        data:{
+            seen:true
+        }
+    })
+    app3.seen = false    //取消显示
+//- - - - - - - - - - - - - - - - - - - - - - - - - -
+    var app4 = new Vue({
+        el: '#app-4',
+        data: {
+            isActive:true,
+            todos: [
+                { text: '学习 JavaScript' },
+                { text: '学习 Vue' },
+                { text: '整个牛项目' }
+            ]
+        }
+    })
+    app4.todos.push({ text: '新项目1'},{ text: '新项目2'})
+//- - - - - - - - - - - - - - - - - - - - - - - - - -
+    var app5 = new Vue({
+        el: '#app-5',
+        data: {
+            message: 'Hello Vue.js!',
+            activeClass: 'active',
+            errorClass: 'text-danger'
+        },
+        methods: {
+            reverseMessage: function () {
+                this.message = this.message.split('').reverse().join('')
+            }
+        }
+    })
+//- - - - - - - - - - - - - - - - - - - - - - - - - -
+    var app6 = new Vue({
+        el: '#app-6',
+        data: {
+            message: 'Hello Vue!'
+        }
+    })
+    Vue.component('todo-item', {
+        props: ['todo'],
+        template: '<li>{{ todo.text }}</li>'
+    })
+//- - - - - - - - - - - - - - - - - - - - - - - - - -
+    var app7 = new Vue({
+        el: '#app-7',
+        data: {
+            groceryList: [
+                { id: 0, text: '蔬菜' },
+                { id: 1, text: '奶酪' },
+                { id: 2, text: '随便' }
+            ]
+        }
+    })
+//- - - - - - - - - - - - - - - - - - - - - - - - - -
+    var vm = new Vue({
+        el: '#example',
+        data: {
+            message: 'Hello'
+        },
+        computed: {
+            // 计算属性的 getter
+            reversedMessage: function () {
+                // `this` 指向 vm 实例
+                return this.message.split('').reverse().join('')
+            }
+        }
+    })
+    vm.message = 'Goodbye'
+//- - - - - - - - - - - - - - - - - - - - - - - - - -
+    var watchExampleVM = new Vue({
+        el: '#watch-example',
+        data: {
+            question: '',
+            answer: 'I cannot give you an answer until you ask a question!'
+        },
+        watch: {
+            // 如果 `question` 发生改变，这个函数就会运行
+            question: function (newQuestion) {
+                this.answer = 'Waiting for you to stop typing...'
+                this.getAnswer()
+            }
+        },
+        methods: {
+            // `_.debounce` 是一个通过 Lodash 限制操作频率的函数。
+            // 在这个例子中，我们希望限制访问 yesno.wtf/api 的频率
+            // AJAX 请求直到用户输入完毕才会发出。想要了解更多关于
+            // `_.debounce` 函数 (及其近亲 `_.throttle`) 的知识，
+            // 请参考：https://lodash.com/docs#debounce
+            getAnswer: _.debounce(
+                    function () {
+                        if (this.question.indexOf('?') === -1) {
+                            this.answer = 'Questions usually contain a question mark. ;-)'
+                            return
+                        }
+                        this.answer = 'Thinking...'
+                        var vm = this
+                        axios.get('https://yesno.wtf/api')
+                                .then(function (response) {
+                                    vm.answer = _.capitalize(response.data.answer)
+                                })
+                                .catch(function (error) {
+                                    vm.answer = 'Error! Could not reach the API. ' + error
+                                })
+                    },
+                    // 这是我们为判定用户停止输入等待的毫秒数
+                    500
+            )
+        }
+    })
+//- - - - - - - - - - - - - - - - - - - - - - - - - -
+    var logoType = new Vue({
+        el:'logoType'
+    })
+    logoType.loginType = 'a'
+    var appIf = new Vue({
+        el:'#app-if',
+        type:'A'
+    })
+    var appShow = new Vue({
+        el:'#app-show'
+    })
+    var example1 = new Vue({
+        el: '#example-1',
+        data: {
+            items: [
+                { message: 'Foo' },
+                { message: 'Bar' }
+            ]
+        }
+    })
+    example1.items.push({ message: 'Bbbbbbb' }) //添加最后一个
+//    example1.items.pop()  //删除最后一个
+//    example1.items.shift()  //删除第一个
+    example1.items.unshift({ message: 'ddd' })//添加第一个
+    example1.items.splice(1,0,{ message: 'index' },{ message: '1index' }) //从第1个后面开始，删除0个，添加index,1index
+//    example1.items.sort()
+    example1.items = example1.items.filter(function (item) {  //替换新数组
+        return item.message.match(/d/g) //根据d 过滤出所有包含d的新数组
+    })
+//    concat() 连接2个数组
+//    slice(1,3)   切片 包前不包后 从1个开始，到3结束，不包括3
+    var example2 = new Vue({
+        el: '#example-2',
+        data: {
+            parentMessage: 'Parent',
+            items: [
+                { message: 'Foo' },
+                { message: 'Bar' }
+            ]
+        }
+    })
+    new Vue({
+        el: '#v-for-object',
+        data: {
+            object: {
+                firstName: 'John',
+                lastName: 'Doe',
+                age: 30
+            }
+        }
+    })
+</script>
+</body>
+</html>
